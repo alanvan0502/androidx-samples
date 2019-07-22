@@ -58,7 +58,7 @@
         android:layout_height="0dp"
         android:layout_margin="@dimen/margin"
         android:gravity="center"
-        android:text="@string/textview_hint"
+        android:text="@string/get_location"
         android:textAppearance="@style/TextAppearance.AppCompat.Headline"
         android:textSize="22sp"
         app:layout_constraintBottom_toTopOf="@+id/button_location"
