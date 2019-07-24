@@ -14,4 +14,6 @@ public interface AppLocationServices {
     Flowable<Location> getLocationUpdates(AppLocationClient locationClient);
 
     Flowable<String> getAddressUpdates(AppLocationClient locationClient);
+
+    Observable<Float> getSpeed(AppLocationClient locationClient);
 }

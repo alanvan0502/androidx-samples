@@ -41,6 +41,7 @@ public class MainActivity extends AppCompatActivity {
     private static final String TAG = "MainActivity";
 
     private TextView mLocationTextView;
+    private TextView mSpeedTextView;
     private ImageView mAndroidImageView;
     private AnimatorSet mRotateAnim;
 
@@ -57,7 +58,7 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         mLocationTextView = findViewById(R.id.textview_location);
-
+        mSpeedTextView = findViewById(R.id.textview_speed);
         mAndroidImageView = findViewById(R.id.imageview_android);
         mRotateAnim = (AnimatorSet) AnimatorInflater.loadAnimator(this, R.animator.rotate);
 
@@ -119,8 +120,10 @@ public class MainActivity extends AppCompatActivity {
                             if (location != null) {
                                 Float distance = mainViewModel.getDistanceWalked(location);
                                 mLocationTextView.setText(getString(R.string.distance_text, distance, location.getTime()));
+                                mSpeedTextView.setText(getString(R.string.speed, location.getSpeed()));
                             } else {
                                 mLocationTextView.setText(getString(R.string.no_location));
+                                mSpeedTextView.setText(getString(R.string.no_speed));
                             }
                         },
                         error -> Log.e("Error", error.getMessage()));
@@ -131,8 +134,12 @@ public class MainActivity extends AppCompatActivity {
             mainViewModel.setTrackingLocation(false);
             mLocationButton.setText(getString(R.string.start_tracking_loc));
             mLocationTextView.setText(getString(R.string.distance_text, 0, System.currentTimeMillis()));
-            locationUpdateDisposable.dispose();
-            firstLocationDisposable.dispose();
+            if (locationUpdateDisposable != null) {
+                locationUpdateDisposable.dispose();
+            }
+            if (firstLocationDisposable != null) {
+                firstLocationDisposable.dispose();
+            }
             mRotateAnim.end();
         }
     }
@@ -140,13 +147,13 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        if (!bag.isDisposed()) {
+        if (bag != null && !bag.isDisposed()) {
             bag.dispose();
         }
-        if (!locationUpdateDisposable.isDisposed()) {
+        if (locationUpdateDisposable != null && !locationUpdateDisposable.isDisposed()) {
             locationUpdateDisposable.dispose();
         }
-        if (!firstLocationDisposable.isDisposed()) {
+        if (firstLocationDisposable != null && !firstLocationDisposable.isDisposed()) {
             firstLocationDisposable.dispose();
         }
     }

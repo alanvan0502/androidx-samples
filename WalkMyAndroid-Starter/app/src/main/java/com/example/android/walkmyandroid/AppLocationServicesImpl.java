@@ -115,4 +115,9 @@ public class AppLocationServicesImpl implements AppLocationServices {
     public Flowable<String> getAddressUpdates(AppLocationClient locationClient) {
         return getLocationUpdates(locationClient).map(location -> getAddressString(locationClient, location));
     }
+
+    @Override
+    public Observable<Float> getSpeed(AppLocationClient locationClient) {
+        return getLocation(locationClient).map(location -> location.getSpeed());
+    }
 }
